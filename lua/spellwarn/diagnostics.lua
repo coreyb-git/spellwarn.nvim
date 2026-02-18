@@ -48,7 +48,6 @@ function M.update_diagnostics(opts, bufnr)
             end
         end
     end
-    vim.diagnostic.reset(namespace, bufnr)
     -- TODO: Add suffix diagnostics with type of spelling error the way that LSP diagnostics do
     vim.diagnostic.set(namespace, bufnr, diags, opts.diagnostic_opts)
 end
