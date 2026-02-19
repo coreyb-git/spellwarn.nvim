@@ -13,7 +13,9 @@ end
 
 -- PERF: try wrapping this with a function to make it run asynchronously?
 function M.update_diagnostics(opts, bufnr)
-    if opts.max_file_size and vim.api.nvim_buf_line_count(bufnr) > opts.max_file_size then return end
+    if opts.max_file_size and vim.api.nvim_buf_line_count(bufnr) > opts.max_file_size then
+        return
+    end
     local ft = vim.fn.getbufvar(bufnr, "&filetype")
     if opts.ft_config[ft] == false or (opts.ft_config[ft] == nil and opts.ft_default == false) then
         vim.diagnostic.reset(namespace, bufnr)
@@ -35,15 +37,16 @@ function M.update_diagnostics(opts, bufnr)
                 end
             end
             msg = msg .. addition
+            msg = "!"
         end
         if error.word ~= "" and error.word ~= "spellwarn" then
             if opts.severity[error.type] then
                 diags[#diags + 1] = {
-                    col      = error.col - 1, -- 0-indexed
-                    lnum     = error.lnum - 1, -- 0-indexed
-                    message  = msg,
+                    col = error.col - 1, -- 0-indexed
+                    lnum = error.lnum - 1, -- 0-indexed
+                    message = msg,
                     severity = vim.diagnostic.severity[opts.severity[error.type]],
-                    source   = "spellwarn",
+                    source = "spellwarn",
                 }
             end
         end
@@ -57,7 +60,9 @@ function M.setup(opts)
         vim.api.nvim_create_augroup("Spellwarn", {})
         vim.api.nvim_create_autocmd(opts.event, {
             group = "Spellwarn",
-            callback = function() M.update_diagnostics(opts, vim.fn.bufnr("%")) end,
+            callback = function()
+                M.update_diagnostics(opts, vim.fn.bufnr("%"))
+            end,
             desc = "Update Spellwarn diagnostics",
         })
         for _, bufnr in pairs(get_bufs_loaded()) do
@@ -82,22 +87,23 @@ function M.setup(opts)
         end
     end
 
-    vim.api.nvim_create_user_command(
-        "Spellwarn",
-        function(args)
-            local arg = args.args
-            if arg == "enable" then
-                M.enable()
-            elseif arg == "disable" then
-                M.disable()
-            elseif arg == "toggle" then
-                M.toggle()
-            else
-                vim.api.nvim_echo({ { "Invalid argument: " .. arg .. "\n" } }, true, { err = true })
-            end
+    vim.api.nvim_create_user_command("Spellwarn", function(args)
+        local arg = args.args
+        if arg == "enable" then
+            M.enable()
+        elseif arg == "disable" then
+            M.disable()
+        elseif arg == "toggle" then
+            M.toggle()
+        else
+            vim.api.nvim_echo({ { "Invalid argument: " .. arg .. "\n" } }, true, { err = true })
+        end
+    end, {
+        nargs = 1,
+        complete = function()
+            return { "disable", "enable", "toggle" }
         end,
-        { nargs = 1, complete = function() return { "disable", "enable", "toggle" } end }
-    )
+    })
 
     if opts.enable then
         M.enable()

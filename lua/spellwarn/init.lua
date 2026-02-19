@@ -7,19 +7,19 @@ local defaults = {
     },
     enable = true, -- enable diagnostics on startup
     ft_config = { -- spellcheck method: "cursor", "iter", or boolean
-        alpha   = false,
-        help    = false,
-        lazy    = false,
+        alpha = false,
+        help = false,
+        lazy = false,
         lspinfo = false,
-        mason   = false,
+        mason = false,
     },
     ft_default = true, -- default option for unspecified filetypes
     max_file_size = nil, -- maximum file size to check in lines (nil for no limit)
     severity = { -- severity for each spelling error type (false to disable diagnostics for that type)
-        spellbad   = "WARN",
-        spellcap   = "HINT",
+        spellbad = "WARN",
+        spellcap = "HINT",
         spelllocal = "HINT",
-        spellrare  = "INFO",
+        spellrare = "INFO",
     },
     suggest = false, -- show spelling suggestions in diagnostic message
     num_suggest = 3, -- number of suggestions shown in diagnostic message
