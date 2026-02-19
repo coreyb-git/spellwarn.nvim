@@ -45,9 +45,9 @@ function M.get_spelling_errors_cursor(bufnr)
     -- Get location of first spelling error to start while loop
     vim.o.foldenable = false
     vim.o.conceallevel = 0
-    vim.fn.setpos(".", { bufnr, 1, 2, 0 })
+    vim.cmd('keepjumps call setpos(".", [0, 1,2,0])')
     local minpos = vim.fn.getpos(".")
-    vim.cmd("silent normal! ]s")
+    vim.cmd("silent keepjumps normal! ]s")
     local location = vim.fn.getpos(".")
 
     local function adjust_table() -- Add error to table
@@ -65,7 +65,7 @@ function M.get_spelling_errors_cursor(bufnr)
     while (minpos[2] < location[2]) or (minpos[2] == location[2] and minpos[3] < location[3]) do
         adjust_table()
         minpos = vim.fn.getpos(".")
-        vim.cmd("silent normal! ]s")
+        vim.cmd("silent keepjumps normal! ]s")
         location = vim.fn.getpos(".")
     end
 
