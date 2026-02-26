@@ -4,6 +4,7 @@ local defaults = {
     event = { -- event(s) to refresh diagnostics on
         "TextChanged",
         "InsertLeave",
+        "BufReadPost", -- Update after initial buffer render to set the scene.
     },
     enable = true, -- enable diagnostics on startup
     ft_config = { -- spellcheck method: "cursor", "iter", or boolean
