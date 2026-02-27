@@ -2,9 +2,7 @@ local M = {}
 local defaults = {
     -- FIX: Trouble.nvim jump to diagnostic is slightly buggy with `TextChanged` event; no good workaround though AFAICT
     event = { -- event(s) to refresh diagnostics on
-        "TextChanged",
-        "InsertLeave",
-        "BufReadPost", -- Update after initial buffer render to set the scene.
+        "CursorHold", -- Relaxed updates, but also captures spelling setting being toggled.
     },
     enable = true, -- enable diagnostics on startup
     ft_config = { -- spellcheck method: "cursor", "iter", or boolean
