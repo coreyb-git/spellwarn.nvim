@@ -42,7 +42,7 @@ function M.update_diagnostics(opts, bufnr)
         if error.word ~= "" and error.word ~= "spellwarn" then
             if opts.severity[error.type] then
                 diags[#diags + 1] = {
-                    col = error.col - 1,   -- 0-indexed
+                    col = error.col - 1, -- 0-indexed
                     lnum = error.lnum - 1, -- 0-indexed
                     message = msg,
                     severity = vim.diagnostic.severity[opts.severity[error.type]],
@@ -62,7 +62,7 @@ function M.setup(opts)
             group = "Spellwarn",
             callback = function()
                 local winid = vim.api.nvim_get_current_win()
-                local bufnr = vim.fn.bufnr('%')
+                local bufnr = vim.fn.bufnr("%")
                 if winid then
                     if not vim.wo[winid].spell then
                         vim.diagnostic.reset(namespace, bufnr) -- ensure old are cleared if spell is toggled to off.
@@ -70,11 +70,7 @@ function M.setup(opts)
                     end
                 end
 
-                vim.schedule(
-                    function()
-                        M.update_diagnostics(opts, vim.fn.bufnr("%"))
-                    end
-                )
+                M.update_diagnostics(opts, bufnr)
             end,
             desc = "Update Spellwarn diagnostics",
         })
