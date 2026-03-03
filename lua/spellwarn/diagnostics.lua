@@ -37,7 +37,6 @@ function M.update_diagnostics(opts, bufnr)
                 end
             end
             msg = msg .. addition
-            msg = "!"
         end
         if error.word ~= "" and error.word ~= "spellwarn" then
             if opts.severity[error.type] then
