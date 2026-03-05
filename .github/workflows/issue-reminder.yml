@@ -1,0 +1,24 @@
+name: Issue Reminder
+
+on:
+  schedule:
+    - cron: "0 21 * * *"   # runs daily
+  workflow_dispatch:
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - uses: actions/stale@v9
+        with:
+          days-before-stale: 7
+          days-before-close: -1
+
+          stale-issue-message: >
+            Bump — this issue has had no activity for 7 days.
+            This is a maintainer reminder so it doesn't get lost.
+
+          exempt-issue-labels: no-remind
