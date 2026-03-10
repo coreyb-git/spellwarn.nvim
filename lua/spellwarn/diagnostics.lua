@@ -39,7 +39,7 @@ function M.update_diagnostics(opts, bufnr)
                     col = error.col - 1, -- 0-indexed
                     lnum = error.lnum - 1, -- 0-indexed
                     message = opts.severity[error.type].prefix .. msg .. opts.severity[error.type].suffix,
-                    severity = vim.diagnostic.severity[opts.severity[error.type].icon],
+                    severity = vim.diagnostic.severity[opts.severity[error.type].level],
                     source = "SpellWarn",
                 }
             end
