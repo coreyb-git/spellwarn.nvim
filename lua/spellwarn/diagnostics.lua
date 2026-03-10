@@ -47,7 +47,7 @@ function M.update_diagnostics(opts, bufnr)
     end
 
     -- Pre-process, if a function is set in opts to do anything.
-    diags = opts.func_preprocess(bufnr, diags)
+    diags = opts.func_preprocess(bufnr, diags) or {}
 
     -- TODO: Add suffix diagnostics with type of spelling error the way that LSP diagnostics do
     vim.diagnostic.set(namespace, bufnr, diags, opts.diagnostic_opts)
