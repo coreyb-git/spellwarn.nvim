@@ -37,10 +37,10 @@ local defaults = {
 
     diagnostic_opts = { severity_sort = true }, -- options for diagnostic display
     severity = { -- severity for each spelling error type (false to disable diagnostics for that type)
-        spellbad = { icon = "WARN", prefix = "Unknown Word: " },
-        spellcap = { icon = "HINT", prefix = "Missing capital: " },
-        spelllocal = { icon = "HINT", prefix = "Word Localization: " },
-        spellrare = { icon = "INFO", prefix = "Rare Word: " },
+        spellbad = { icon = "WARN", prefix = "Unknown Word: ", suffix = "" },
+        spellcap = { icon = "HINT", prefix = "Missing capital: ", suffix = "" },
+        spelllocal = { icon = "HINT", prefix = "Word Localization: ", suffix = "" },
+        spellrare = { icon = "INFO", prefix = "Rare Word: ", suffix = "" },
     },
 }
 
