@@ -66,7 +66,7 @@ local function can_update(opts, bufnr)
 
     -- Buffer type check.
     local buftype = vim.api.nvim_get_option_value("buftype", { buf = bufnr })
-    if opts.bt_config[buftype] then
+    if opts.bt_config[buftype] ~= nil then
         is_ok = opts.bt_config[buftype]
     else
         is_ok = opts.bt_default
@@ -79,7 +79,7 @@ local function can_update(opts, bufnr)
 
     -- File type check.
     local ft = vim.fn.getbufvar(bufnr, "&filetype")
-    if opts.ft_config[ft] then
+    if opts.ft_config[ft] ~= nil then
         is_ok = opts.ft_config[ft]
     else
         is_ok = opts.ft_default
