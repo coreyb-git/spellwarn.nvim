@@ -8,7 +8,19 @@ local defaults = {
         "TextChangedI",
         "TextChangedP",
     },
+
     enable = true, -- enable diagnostics on startup
+
+    -- function to do any custom processing of the diagnostics table before passing it to vim.diagnostic.set
+    func_preprocess = function(bufnr, diag_tbl)
+        return diag_tbl
+    end,
+
+    bt_config = { -- buffer types to run on
+        [""] = true,
+    },
+    bt_default = false, -- default for types not in bt_config.
+
     ft_config = { -- spellcheck method: "cursor", "iter", or boolean
         alpha = false,
         help = false,
@@ -17,7 +29,9 @@ local defaults = {
         mason = false,
     },
     ft_default = true, -- default option for unspecified filetypes
+
     max_file_size = nil, -- maximum file size to check in lines (nil for no limit)
+
     severity = { -- severity for each spelling error type (false to disable diagnostics for that type)
         spellbad = "WARN",
         spellcap = "HINT",

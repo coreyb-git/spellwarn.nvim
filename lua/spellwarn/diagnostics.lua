@@ -16,11 +16,6 @@ function M.update_diagnostics(opts, bufnr)
     if opts.max_file_size and vim.api.nvim_buf_line_count(bufnr) > opts.max_file_size then
         return
     end
-    local ft = vim.fn.getbufvar(bufnr, "&filetype")
-    if opts.ft_config[ft] == false or (opts.ft_config[ft] == nil and opts.ft_default == false) then
-        vim.diagnostic.reset(namespace, bufnr)
-        return
-    end
     local diags = {}
     for _, error in pairs(require("spellwarn.spelling").get_spelling_errors_main(opts, bufnr) or {}) do
         local msg = opts.prefix .. error.word
@@ -50,8 +45,47 @@ function M.update_diagnostics(opts, bufnr)
             end
         end
     end
+
+    -- Pre-process, if a function is set in opts to do anything.
+    diags = opts.func_preprocess(bufnr, diags)
+
     -- TODO: Add suffix diagnostics with type of spelling error the way that LSP diagnostics do
     vim.diagnostic.set(namespace, bufnr, diags, opts.diagnostic_opts)
+end
+
+local function can_update(opts, bufnr)
+    local winid = vim.api.nvim_get_current_win()
+    if winid then
+        if not vim.wo[winid].spell then
+            return false
+        end
+    end
+
+    -- Allow the buffer type, or file type, to cancel the attempt to process the buffer.
+    local is_ok = true
+
+    -- Buffer type check.
+    local buftype = vim.api.nvim_get_option_value("buftype", { buf = bufnr })
+    if opts.bt_config[buftype] then
+        is_ok = opts.bt_config[buftype]
+    else
+        is_ok = opts.bt_default
+    end
+
+    if not is_ok then
+        return false
+    end
+    -- Still OK to proceed.
+
+    -- File type check.
+    local ft = vim.fn.getbufvar(bufnr, "&filetype")
+    if opts.ft_config[ft] then
+        is_ok = opts.ft_config[ft]
+    else
+        is_ok = opts.ft_default
+    end
+
+    return is_ok
 end
 
 function M.setup(opts)
@@ -60,16 +94,12 @@ function M.setup(opts)
         vim.api.nvim_create_autocmd(opts.event, {
             group = "Spellwarn",
             callback = function()
-                local winid = vim.api.nvim_get_current_win()
                 local bufnr = vim.fn.bufnr("%")
-                if winid then
-                    if not vim.wo[winid].spell then
-                        vim.diagnostic.reset(namespace, bufnr) -- ensure old are cleared if spell is toggled to off.
-                        return
-                    end
+                if can_update(opts, bufnr) then
+                    M.update_diagnostics(opts, bufnr)
+                else
+                    vim.diagnostic.reset(namespace, bufnr)
                 end
-
-                M.update_diagnostics(opts, bufnr)
             end,
             desc = "Update Spellwarn diagnostics",
         })
