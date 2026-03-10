@@ -11,6 +11,11 @@ local defaults = {
 
     enable = true, -- enable diagnostics on startup
 
+    max_file_size = nil, -- maximum file size to check in lines (nil for no limit)
+
+    suggest = false, -- show spelling suggestions in diagnostic message
+    num_suggest = 3, -- number of suggestions shown in diagnostic message
+
     -- function to do any custom processing of the diagnostics table before passing it to vim.diagnostic.set
     func_preprocess = function(bufnr, diag_tbl)
         return diag_tbl
@@ -30,18 +35,13 @@ local defaults = {
     },
     ft_default = true, -- default option for unspecified filetypes
 
-    max_file_size = nil, -- maximum file size to check in lines (nil for no limit)
-
-    severity = { -- severity for each spelling error type (false to disable diagnostics for that type)
-        spellbad = "WARN",
-        spellcap = "HINT",
-        spelllocal = "HINT",
-        spellrare = "INFO",
-    },
-    suggest = false, -- show spelling suggestions in diagnostic message
-    num_suggest = 3, -- number of suggestions shown in diagnostic message
-    prefix = "possible misspelling(s): ", -- prefix for each diagnostic message
     diagnostic_opts = { severity_sort = true }, -- options for diagnostic display
+    severity = { -- severity for each spelling error type (false to disable diagnostics for that type)
+        spellbad = { icon = "WARN", prefix = "Unknown Word: " },
+        spellcap = { icon = "HINT", prefix = "Missing capital: " },
+        spelllocal = { icon = "HINT", prefix = "Word Localization: " },
+        spellrare = { icon = "INFO", prefix = "Rare Word: " },
+    },
 }
 
 function M.setup(opts)

@@ -18,7 +18,7 @@ function M.update_diagnostics(opts, bufnr)
     end
     local diags = {}
     for _, error in pairs(require("spellwarn.spelling").get_spelling_errors_main(opts, bufnr) or {}) do
-        local msg = opts.prefix .. error.word
+        local msg = error.word
         if opts.suggest and opts.num_suggest > 0 then
             local suggestions = vim.fn.spellsuggest(error.word, opts.num_suggest)
             local addition = "\nSuggestions:\n"
@@ -38,9 +38,9 @@ function M.update_diagnostics(opts, bufnr)
                 diags[#diags + 1] = {
                     col = error.col - 1, -- 0-indexed
                     lnum = error.lnum - 1, -- 0-indexed
-                    message = msg,
-                    severity = vim.diagnostic.severity[opts.severity[error.type]],
-                    source = "spellwarn",
+                    message = opts.severity[error.type].prefix .. msg,
+                    severity = vim.diagnostic.severity[opts.severity[error.type].icon],
+                    source = "SpellWarn",
                 }
             end
         end
