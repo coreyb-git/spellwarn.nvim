@@ -64,6 +64,11 @@ Pass any of the following options to `require("spellwarn").setup()`:
     
         enable = true, -- enable diagnostics on startup
     
+        max_file_size = nil, -- maximum file size to check in lines (nil for no limit)
+    
+        suggest = false, -- show spelling suggestions in diagnostic message
+        num_suggest = 3, -- number of suggestions shown in diagnostic message
+    
         -- function to do any custom processing of the diagnostics table before passing it to vim.diagnostic.set
         func_preprocess = function(bufnr, diag_tbl)
             return diag_tbl
@@ -83,19 +88,13 @@ Pass any of the following options to `require("spellwarn").setup()`:
         },
         ft_default = true, -- default option for unspecified filetypes
     
-        max_file_size = nil, -- maximum file size to check in lines (nil for no limit)
-    
-        severity = { -- severity for each spelling error type (false to disable diagnostics for that type)
-            spellbad = "WARN",
-            spellcap = "HINT",
-            spelllocal = "HINT",
-            spellrare = "INFO",
-        },
-        suggest = false, -- show spelling suggestions in diagnostic message
-        num_suggest = 3, -- number of suggestions shown in diagnostic message
-        prefix = "possible misspelling(s): ", -- prefix for each diagnostic message
         diagnostic_opts = { severity_sort = true }, -- options for diagnostic display
-    }
+        severity = { -- severity for each spelling error type (false to disable diagnostics for that type)
+            spellbad = { level = "WARN", prefix = "Unknown Word: ", suffix = "" },
+            spellcap = { level = "HINT", prefix = "Missing capital: ", suffix = "" },
+            spelllocal = { level = "HINT", prefix = "Word Localization: ", suffix = "" },
+            spellrare = { level = "INFO", prefix = "Rare Word: ", suffix = "" },
+        },
 <
 
 Most options are overwritten (e.g. passing `ft_config = { python = false }`
