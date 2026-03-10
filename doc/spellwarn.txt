@@ -1,4 +1,4 @@
-*spellwarn.txt*           For NVIM v0.8.0           Last change: 2026 March 09
+*spellwarn.txt*           For NVIM v0.8.0           Last change: 2026 March 10
 
 ==============================================================================
 Table of Contents                                *spellwarn-table-of-contents*
@@ -64,7 +64,10 @@ Pass any of the following options to `require("spellwarn").setup()`:
     
         enable = true, -- enable diagnostics on startup
     
-        func_preprocess = function() end, -- function to do any custom processing of the diagnostics table before passing it to vim.diagnostic.set
+        -- function to do any custom processing of the diagnostics table before passing it to vim.diagnostic.set
+        func_preprocess = function(bufnr, diag_tbl)
+            return diag_tbl
+        end,
     
         bt_config = { -- buffer types to run on
             [""] = true,
