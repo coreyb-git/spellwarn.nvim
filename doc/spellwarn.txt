@@ -1,4 +1,4 @@
-*spellwarn.txt*           For NVIM v0.8.0           Last change: 2026 March 10
+*spellwarn.txt*           For NVIM v0.8.0           Last change: 2026 March 13
 
 ==============================================================================
 Table of Contents                                *spellwarn-table-of-contents*
@@ -128,12 +128,16 @@ when needed). To disable diagnostics on a specific line, add
 diagnostics in a file, add a comment with `spellwarn:disable` to the _first or
 second_ line of the file.
 
+`Spellwarn qflist` will show the quickfix window, populated with the list of
+spelling mistakes in the current buffer.
+
 
 LUA API                                     *spellwarn-spellwarn.nvim-lua-api*
 
 The Lua API matches the arguments for the `Spellwarn` command: -
 `require("spellwarn").disable()` to disable - `require("spellwarn").enable()`
-to enable - `require("spellwarn").toggle()` to toggle
+to enable - `require("spellwarn").toggle()` to toggle -
+`require("spellwarn").qflist()` to show the quickfix window
 
 
 CONTRIBUTING                           *spellwarn-spellwarn.nvim-contributing*
