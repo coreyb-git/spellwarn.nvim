@@ -58,6 +58,9 @@ function M.setup(opts)
     M.enable = require("spellwarn.diagnostics").enable
     M.disable = require("spellwarn.diagnostics").disable
     M.toggle = require("spellwarn.diagnostics").toggle
+    M.qflist = function()
+        require("spellwarn.qflist").qflist(defaults)
+    end
 end
 
 return M

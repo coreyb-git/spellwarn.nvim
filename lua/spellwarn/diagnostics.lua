@@ -132,13 +132,15 @@ function M.setup(opts)
             M.disable()
         elseif arg == "toggle" then
             M.toggle()
+        elseif arg == "qflist" then
+            require("spellwarn.qflist").qflist(opts)
         else
             vim.api.nvim_echo({ { "Invalid argument: " .. arg .. "\n" } }, true, { err = true })
         end
     end, {
         nargs = 1,
         complete = function()
-            return { "disable", "enable", "toggle" }
+            return { "disable", "enable", "toggle", "qflist" }
         end,
     })
 

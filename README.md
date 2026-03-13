@@ -81,12 +81,15 @@ Most options are overwritten (e.g. passing `ft_config = { python = false }` will
 
 The plugin should be good to go after installation with the provided snippet. It has sensible defaults. Run `:Spellwarn enable`, `:Spellwarn disable`, or `:Spellwarn toggle` to enable/disable/toggle during runtime (though this will *not* override `max_file_size`, `ft_config`, or `ft_default`). You can also add keybindings for any of these (one possible usecase would be disabling by default with the `enable` key of the configuration table and then only enabling when needed). To disable diagnostics on a specific line, add `spellwarn:disable-next-line` to the line immediately above or `spellwarn:disable-line` to a comment at the end of the line. To disable diagnostics in a file, add a comment with `spellwarn:disable` to the *first or second* line of the file.
 
+`Spellwarn qflist` will show the quickfix window, populated with the list of spelling mistakes in the current buffer.
+
 ## Lua API
 
 The Lua API matches the arguments for the `Spellwarn` command:
 - `require("spellwarn").disable()` to disable
 - `require("spellwarn").enable()` to enable
 - `require("spellwarn").toggle()` to toggle
+- `require("spellwarn").qflist()` to show the quickfix window
 
 ## Contributing
 
