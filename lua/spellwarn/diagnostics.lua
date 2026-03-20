@@ -1,6 +1,8 @@
 local M = {}
 local namespace = vim.api.nvim_create_namespace("Spellwarn")
 
+local flag_text_changed = true -- Prevent updating when nothing was changed (CursorHold navigation, etc)
+
 local function get_bufs_loaded()
     local bufs_loaded = {}
     for i, buf_hndl in ipairs(vim.api.nvim_list_bufs()) do
@@ -53,6 +55,10 @@ function M.update_diagnostics(opts, bufnr)
 end
 
 local function can_update(opts, bufnr)
+    if not flag_text_changed then
+        return false
+    end
+
     local winid = vim.api.nvim_get_current_win()
     if winid then
         if not vim.wo[winid].spell then
@@ -88,13 +94,23 @@ local function can_update(opts, bufnr)
 end
 
 function M.setup(opts)
+    local group_name = "Spellwarn"
     function M.enable()
-        vim.api.nvim_create_augroup("Spellwarn", {})
+        vim.api.nvim_create_augroup(group_name, {})
+
+        vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
+            group = group_name,
+            callback = function()
+                flag_text_changed = true
+            end,
+        })
+
         vim.api.nvim_create_autocmd(opts.event, {
-            group = "Spellwarn",
+            group = group_name,
             callback = function()
                 local bufnr = vim.fn.bufnr("%")
                 if can_update(opts, bufnr) then
+                    flag_text_changed = false
                     M.update_diagnostics(opts, bufnr)
                 else
                     vim.diagnostic.reset(namespace, bufnr)
