@@ -55,10 +55,6 @@ function M.update_diagnostics(opts, bufnr)
 end
 
 local function can_update(opts, bufnr)
-    if not flag_text_changed then
-        return false
-    end
-
     local winid = vim.api.nvim_get_current_win()
     if winid then
         if not vim.wo[winid].spell then
@@ -97,8 +93,8 @@ function M.setup(opts)
     local group_name = "Spellwarn"
     function M.enable()
         vim.api.nvim_create_augroup(group_name, {})
-
-        vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
+        -- BufEnter to trigger an initial pass through.
+        vim.api.nvim_create_autocmd({ "BufEnter", "TextChanged", "TextChangedI" }, {
             group = group_name,
             callback = function()
                 flag_text_changed = true
@@ -108,6 +104,10 @@ function M.setup(opts)
         vim.api.nvim_create_autocmd(opts.event, {
             group = group_name,
             callback = function()
+                if not flag_text_changed then
+                    return false
+                end
+
                 local bufnr = vim.fn.bufnr("%")
                 if can_update(opts, bufnr) then
                     flag_text_changed = false
